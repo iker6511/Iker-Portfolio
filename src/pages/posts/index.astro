@@ -1,10 +1,8 @@
 ---
 // ============================================================================
-// posts/index.astro — LISTADO DEL BLOG
+// posts/index.astro — LISTADO DE WRITE-UPS
 // ============================================================================
-// Toda la lista de posts dentro de UNA ventana titulada "blog/" con icono de
-// carpeta — como abrir una carpeta en el Finder/Explorer y ver todos los
-// archivos dentro.
+// Toda la lista dentro de UNA ventana titulada "write-ups/"
 // ============================================================================
 
 import BaseLayout from '../../layouts/BaseLayout.astro';
@@ -19,31 +17,33 @@ const sortedPosts = allPosts.sort(
 ---
 
 <BaseLayout
-  title="Blog — Iker"
-  description="Notas y artículos sobre DevOps, programación y herramientas que utilizo."
+  title="Write-ups de DFIR — Iker"
+  description="Retos de análisis forense digital resueltos y documentados: metodología, evidencia, IOCs y línea de tiempo."
 >
   <div class="container">
     <!-- Cabecera de la página, fuera de la ventana -->
     <header class="page-header">
-      <span class="kicker">Blog</span>
-      <h1>Notas técnicas</h1>
+      <span class="kicker">Análisis forense digital</span>
+      <h1>Write-ups de DFIR</h1>
       <p class="page-intro">
-        Aprendizajes, tutoriales y reflexiones sobre desarrollo, DevOps y
-        las herramientas que uso a diario.
+        Retos de plataformas como CyberDefenders y LetsDefend, resueltos y
+        documentados de principio a fin: metodología, evidencia, IOCs y línea de
+        tiempo. Incluyo también qué me costó y qué haría distinto, porque de eso
+        se aprende más que del resultado.
       </p>
     </header>
 
     <!-- TODA la lista dentro de UNA ventana -->
-    <Window title="blog/" icon="folder">
+    <Window title="write-ups/" icon="folder">
       <!-- Mini-toolbar tipo Finder con la cuenta de items -->
       <div class="toolbar">
         <span class="toolbar-info">
-          {sortedPosts.length} {sortedPosts.length === 1 ? 'archivo' : 'archivos'}
+          {sortedPosts.length} {sortedPosts.length === 1 ? 'write-up' : 'write-ups'}
         </span>
       </div>
 
       {sortedPosts.length === 0 ? (
-        <p class="muted">Aún no hay posts publicados.</p>
+        <p class="muted">Aún no hay write-ups publicados.</p>
       ) : (
         <div class="file-list">
           {sortedPosts.map((post) => <PostCard post={post} />)}

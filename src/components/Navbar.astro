@@ -5,7 +5,7 @@
 // Barra de menús del "sistema" — pegada arriba en todas las páginas.
 //
 // Layout:
-//   [💻 iker.dev]  ./inicio  ./proyectos  ./blog                [Toggle]
+//   [💻 iker.dev]  ./inicio  ./proyectos/laboratorios  ./write-ups          [Toggle]
 //
 // El logo es un pequeño icono de ordenador + texto. Los enlaces tienen
 // formato de paths Unix (./algo) para reforzar el feel de OS.
@@ -33,7 +33,7 @@ const isActive = (href: string) => {
     <!-- LOGO: icono de ordenador + nombre -->
     <a href={base} class="logo" aria-label="Inicio">
       <Icon name="computer" size={18} />
-      <span class="logo-text">iker.dev</span>
+      <span class="logo-text">C:\Users\iker</span>
     </a>
 
     <!-- ENLACES de navegación + toggle -->
@@ -42,10 +42,10 @@ const isActive = (href: string) => {
         ./inicio
       </a>
       <a href={`${base}proyectos/`} class:list={['nav-link', { active: isActive(`${base}proyectos`) }]}>
-        ./proyectos
+        ./laboratorios
       </a>
       <a href={`${base}posts/`} class:list={['nav-link', { active: isActive(`${base}posts`) }]}>
-        ./blog
+        ./write-ups
       </a>
 
       <ThemeToggle />

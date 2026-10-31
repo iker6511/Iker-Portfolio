@@ -27,7 +27,7 @@
    - IBM Plex Sans:   sans neutra y profesional — para cuerpo de texto
    - JetBrains Mono:  monoespaciada — para bloques de código
    --------------------------------------------------------------------------- */
-@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Pixelify+Sans:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 
 /* ---------------------------------------------------------------------------
@@ -88,6 +88,12 @@
   --doc-lines-static: #5d5a52;
   --doc-highlight-static: #ffffff;
 
+  /* Subrayado Posts modo claro */
+  .highlight {
+    background-color: var(--accent);
+    font-weight: bold;
+    color: white;
+  }
 }
 
 /* ---------------------------------------------------------------------------
@@ -120,6 +126,13 @@
   --doc-corner-static: #2f3a33;
   --doc-lines-static: #c7f9cc;
   --doc-highlight-static: #95d5b2;
+
+    /* Subrayado Posts modo oscuro */
+  .highlight {
+    background-color: var(--accent);
+    font-weight: bold;
+    color: black;
+  }
 }
 
 
@@ -194,25 +207,25 @@ svg {
    - Body: IBM Plex Sans
    --------------------------------------------------------------------------- */
 h1 {
-  font-family: var(--font-display);
-  font-weight: 600;
-  line-height: 1.05;
-  letter-spacing: -0.01em;
-  font-size: clamp(3rem, 6.5vw, 4.1rem);   /* hero más grande (era 2.6→4rem) */
+  font-family: 'Press Start 2P', var(--font-display);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: 0;
+  font-size: clamp(2.1rem, 2.7vw, 2.6rem);   /* más pequeño pero claramente H1 */
   color: var(--fg);
 }
 
 h2, h3, h4, h5, h6 {
   font-family: var(--font-body);
   font-weight: 600;
-  line-height: 1.25;
-  letter-spacing: -0.01em;
+  line-height: 1.28;
+  letter-spacing: 0;
   color: var(--fg);
 }
 
-h2 { font-size: clamp(1.7rem, 3.4vw, 2.3rem); }   /* era 1.5→1.9rem */
-h3 { font-size: clamp(1.35rem, 2.4vw, 1.65rem); } /* era 1.2→1.4rem */
-h4 { font-size: 1.2rem; }                          /* era 1.1rem */
+h2 { font-size: clamp(1.55rem, 2.8vw, 1.95rem); }
+h3 { font-size: clamp(1.25rem, 2.2vw, 1.5rem); }
+h4 { font-size: 1.1rem; }
 
 p {
   margin-bottom: 1.05em;
@@ -287,6 +300,63 @@ pre code {
   padding: 0;
   border: none;
   font-size: inherit;
+}
+
+/* TABLAS RETRO — bordes estilo OS antiguo y tema coherente */
+.prose table,
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.6rem 0;
+  background: var(--window-bg);
+  border: 2px solid var(--border);
+  box-shadow:
+    inset 1px 1px 0 var(--bevel-light),
+    inset -1px -1px 0 var(--bevel-dark);
+}
+
+.prose th,
+.prose td,
+th,
+td {
+  padding: 0.95rem 1rem;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--fg);
+  vertical-align: top;
+}
+
+.prose th,
+th {
+  background: var(--window-chrome);
+  color: var(--fg);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.prose tr:last-child td,
+tr:last-child td {
+  border-bottom: 2px solid var(--border);
+}
+
+[data-theme="dark"] .prose table,
+[data-theme="dark"] table {
+  background: var(--window-bg);
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .prose th,
+[data-theme="dark"] th,
+[data-theme="dark"] .prose td,
+[data-theme="dark"] td {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+[data-theme="dark"] .prose th,
+[data-theme="dark"] th {
+  background: var(--window-chrome);
 }
 
 

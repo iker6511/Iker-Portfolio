@@ -35,8 +35,8 @@ const featuredProjects = allProjects
 ---
 
 <BaseLayout
-  title="Iker — Portfolio"
-  description="Portfolio personal y blog técnico de Iker."
+  title="Iker Reyes — Write-ups de DFIR y respuesta a incidentes"
+  description="Análisis forense digital y respuesta a incidentes. Write-ups de memoria, disco y tráfico, y elaboración de informes periciales."
 >
   <div class="container">
     {
@@ -72,13 +72,11 @@ const featuredProjects = allProjects
         <div class="hero-text">
           <span class="kicker">Hola, soy Iker</span>
           <h1>
-            Construyo sistemas en la <span class="hero-accent">web</span> y la <span
-              class="hero-accent">nube</span
-            >.
+            Desarrollo, administro y <span class="hero-accent">analizo</span> sistemas.
           </h1>
           <p class="hero-tagline">
-            Desarrollador PHP con +2 años de experiencia en WordPress y
-            Dolibarr, enfocado en DevOps.
+            Desarrollador PHP y Sysadmin con 3 años de experiencia, orientando el
+            perfil hacia análisis forense digital y respuesta a incidentes.
           </p>
         </div>
       </div>
@@ -94,12 +92,17 @@ const featuredProjects = allProjects
           mantenimiento de aplicaciones en producción.
         </p>
         <p>
-          Además, me encargo de tareas de sistemas como gestión de servidores,
-          backups y mantenimiento de entornos. Me interesa todo lo relacionado
-          con automatización, CI/CD, contenedores y, en general, hacer que los
-          sistemas sean más reproducibles y fáciles de mantener. Poco a poco
-          estoy orientando mi perfil hacia DevOps, combinando desarrollo e
-          infraestructura en mi día a día.
+          Esa parte de sistemas es la que me llevó al análisis forense. Cuando
+          administras una máquina acabas queriendo saber exactamente qué le ha
+          pasado, en qué orden y con qué rastro. Ahí es donde estoy poniendo el
+          foco: análisis de memoria, forense de disco, análisis de tráfico y
+          respuesta a incidentes.
+        </p>
+        <p>
+          Formado en informática forense y elaboración de informes periciales.
+          Publico write-ups de los retos que resuelvo porque documentar es la
+          única forma de aprender de verdad, y porque un informe bien escrito es
+          la mitad del trabajo.
         </p>
         <p>
           Si te interesa contactar conmigo,
@@ -119,10 +122,11 @@ const featuredProjects = allProjects
           <div class="timeline-dot"></div>
           <div class="timeline-content">
             <span class="timeline-date">Presente (en paralelo)</span>
-            <h3>Formación autodidacta en DevOps</h3>
+            <h3>Formación autodidacta en DFIR y blue team</h3>
             <p>
-              Sigo trabajando como desarrollador mientras realizo formación
-              autodidacta en DevOps.
+              Laboratorio propio de análisis: memoria con Volatility3, forense de
+              disco con Autopsy y Timeline Explorer, análisis de tráfico y reglas
+              de detección Sigma. Write-ups publicados de cada reto resuelto.
             </p>
           </div>
         </div>
@@ -166,8 +170,8 @@ const featuredProjects = allProjects
     <Window title="~/certificaciones.txt" icon="document">
       <h2 class="window-h2">Certificaciones</h2>
       <p class="prose">
-        Formación y acreditaciones relacionadas con desarrollo, infraestructura
-        y seguridad.
+        Acreditaciones en seguridad y análisis forense, y formación técnica de
+        base en desarrollo e infraestructura.
       </p>
       <div class="file-list">
         <!-- <div class="file-row">
@@ -187,13 +191,13 @@ const featuredProjects = allProjects
 
     {
       /* =============================================================
-         4. VENTANA: blog/   (últimos posts)
+         4. VENTANA: Write-ups/   (últimos posts)
          ============================================================= */
     }
-    <Window title="blog/" icon="folder">
+    <Window title="write-ups/" icon="folder">
       <header class="section-header">
-        <h2 class="window-h2">Últimos posts</h2>
-        <a href={`${base}posts/`} class="btn">Ver todos →</a>
+        <h2 class="window-h2">Últimos write-ups</h2>
+        <a href={`${base}posts/`} class="btn">Ver todos los write-ups→</a>
       </header>
 
       {
@@ -222,7 +226,7 @@ const featuredProjects = allProjects
 
       {
         featuredProjects.length === 0 ? (
-          <p class="muted">Aún no hay proyectos destacados.</p>
+          <p class="muted">Próximamente: los primeros montajes documentados.</p>
         ) : (
           <div class="project-grid">
             {featuredProjects.map((proyecto) => (
@@ -428,6 +432,8 @@ const featuredProjects = allProjects
 
   .hero-text h1 {
     margin-bottom: 0.7rem;
+    font-size: 2rem;
+    max-width: 50ch;
   }
 
   /* Palabra resaltada en el h1 — fondo verde sólido tipo highlight */
@@ -469,7 +475,7 @@ const featuredProjects = allProjects
   }
 
   /* En móvil hero apilado */
-  @media (max-width: 600px) {
+  @media (max-width: 730px) {
     .hero {
       flex-direction: column;
       align-items: flex-start;

@@ -19,29 +19,29 @@ const sortedProjects = allProjects.sort((a, b) => {
 ---
 
 <BaseLayout
-  title="Proyectos — Iker"
-  description="Una selección de proyectos personales y trabajos en los que he participado."
+  title="Laboratorio — Iker"
+  description="Montajes propios de laboratorio para análisis forense: entornos aislados, captura de artefactos y experimentos sin flag."
 >
   <div class="container">
     <header class="page-header">
-      <span class="kicker">Proyectos</span>
-      <h1>Cosas que he construido</h1>
+      <span class="kicker">Montajes propios</span>
+      <h1>Laboratorio de análisis</h1>
       <p class="page-intro">
-        Una selección de proyectos personales, herramientas internas y trabajos
-        en los que he participado. Algunos siguen vivos, otros descansan en GitHub
-        esperando volver.
+        Entornos que monto para ver qué deja rastro un sistema. Sin flag ni
+        objetivo: levanto una máquina, hago algo, miro qué artefactos aparecen y
+        lo documento. Cada entrada es un experimento, no un tutorial.
       </p>
     </header>
 
-    <Window title="proyectos/" icon="folder">
+    <Window title="laboratorio/" icon="folder">
       <div class="toolbar">
         <span class="toolbar-info">
-          {sortedProjects.length} {sortedProjects.length === 1 ? 'carpeta' : 'carpetas'}
+          {sortedProjects.length} {sortedProjects.length === 1 ? 'montaje' : 'montajes'}
         </span>
       </div>
 
       {sortedProjects.length === 0 ? (
-        <p class="muted">Aún no hay proyectos publicados.</p>
+        <p class="muted">Todavía no hay montajes publicados. El primero, en cuanto monte el entorno.</p>
       ) : (
         <div class="project-grid">
           {sortedProjects.map((proyecto) => <ProjectCard proyecto={proyecto} />)}
