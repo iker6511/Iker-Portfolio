@@ -5,7 +5,7 @@
 // Barra de menús del "sistema" — pegada arriba en todas las páginas.
 //
 // Layout:
-//   [💻 iker.dev]  ./inicio  ./proyectos/laboratorios  ./write-ups          [Toggle]
+//   [💻 iker.dev]  ./inicio  ./proyectos  ./write-ups          [Toggle]
 //
 // El logo es un pequeño icono de ordenador + texto. Los enlaces tienen
 // formato de paths Unix (./algo) para reforzar el feel de OS.
@@ -42,7 +42,7 @@ const isActive = (href: string) => {
         ./inicio
       </a>
       <a href={`${base}proyectos/`} class:list={['nav-link', { active: isActive(`${base}proyectos`) }]}>
-        ./laboratorios
+        ./proyectos
       </a>
       <a href={`${base}posts/`} class:list={['nav-link', { active: isActive(`${base}posts`) }]}>
         ./write-ups
