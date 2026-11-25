@@ -3,7 +3,6 @@ title: "ForensicLab"
 description: "Aplicación web para gestionar y documentar investigaciones forenses: casos, evidencias, hashes, cadena de custodia e informes, con una guía de trabajo basada en ISO/IEC 27037 y UNE 71506."
 year: 2026
 stack: ["Next.js", "React", "TypeScript", "SQLite", "Tailwind CSS", "Node.js"]
-repo: "https://github.com/iker6511/ForensicLab"
 featured: true
 order: 10
 ---
