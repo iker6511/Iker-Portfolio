@@ -2,15 +2,13 @@
 // ============================================================================
 // BaseLayout.astro
 // ============================================================================
-// Layout que envuelve a TODAS las páginas. Define:
-//   - El <head> (meta tags, fonts, favicon, SEO)
-//   - El SCRIPT ANTI-FOUC (importante: ver explicación abajo)
-//   - El Navbar arriba (barra de menús del OS)
-//   - Un <slot /> donde se inyecta el contenido de cada página
-//   - El Footer abajo (barra de estado del OS)
+// Layout que envuelve a TODAS las páginas:
+//   - <head> (meta tags, favicon, SEO)
+//   - SCRIPT ANTI-FOUC (aplica el tema guardado antes de pintar)
+//   - Header (navegación con teclas + LEDs) / <slot /> / Footer
 // ============================================================================
 
-import Navbar from '../components/Navbar.astro';
+import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
 
@@ -43,44 +41,29 @@ const base = import.meta.env.BASE_URL;
 
     <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
 
-    <!-- Color de la barra del navegador en móvil (se adapta al tema) -->
-    <meta name="theme-color" content="#0f1411" media="(prefers-color-scheme: dark)" />
-    <meta name="theme-color" content="#b8b3a5" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#181816" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#e9e5da" media="(prefers-color-scheme: light)" />
 
-    <!-- ====================================================================
-         SCRIPT ANTI-FOUC (Flash Of Unstyled Content)
-         ====================================================================
-         Lee la preferencia de tema desde localStorage y la aplica al <html>
-         ANTES de que se pinte la página. Sin esto, habría un parpadeo.
-         is:inline le dice a Astro que NO procese ni mueva este script.
-         ==================================================================== -->
+    <!-- SCRIPT ANTI-FOUC: oscuro por defecto; si el usuario eligió claro, se respeta -->
     <script is:inline>
       (function () {
-        // Dark por defecto SIEMPRE. Solo se respeta otra opción si el usuario
-        // la ha guardado explícitamente con el toggle (queda en localStorage).
-        const stored = localStorage.getItem('theme');
-        const theme = stored || 'dark';
+        var theme = 'dark';
+        try {
+          theme = localStorage.getItem('theme') || 'dark';
+        } catch (e) {}
         document.documentElement.setAttribute('data-theme', theme);
       })();
     </script>
   </head>
 
   <body>
-    <Navbar />
+    <a href="#contenido" class="skip-link">Saltar al contenido</a>
+    <Header />
 
-    <main class="main">
+    <main id="contenido">
       <slot />
     </main>
 
     <Footer />
   </body>
 </html>
-
-<style>
-  .main {
-    /* Espacio entre la barra de menús y el primer contenido */
-    padding-top: 2.5rem;
-    padding-bottom: 2.5rem;
-    min-height: calc(100vh - 200px);
-  }
-</style>

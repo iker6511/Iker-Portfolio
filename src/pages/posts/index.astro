@@ -2,18 +2,15 @@
 // ============================================================================
 // posts/index.astro — LISTADO DE WRITE-UPS
 // ============================================================================
-// Toda la lista dentro de UNA ventana titulada "write-ups/"
-// ============================================================================
 
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Window from '../../components/Window.astro';
 import PostCard from '../../components/PostCard.astro';
 import { getCollection } from 'astro:content';
 
 const allPosts = await getCollection('posts', ({ data }) => !data.draft);
-const sortedPosts = allPosts.sort(
-  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
-);
+const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+
+const count = `${sortedPosts.length} ${sortedPosts.length === 1 ? 'write-up' : 'write-ups'}`;
 ---
 
 <BaseLayout
@@ -21,72 +18,31 @@ const sortedPosts = allPosts.sort(
   description="Retos de análisis forense digital resueltos y documentados: metodología, evidencia, IOCs y línea de tiempo."
 >
   <div class="container">
-    <!-- Cabecera de la página, fuera de la ventana -->
-    <header class="page-header">
-      <span class="kicker">Análisis forense digital</span>
+    <header class="page-head">
+      <span class="eyebrow">Análisis forense digital · {count}</span>
       <h1>Write-ups de DFIR</h1>
       <p class="page-intro">
-        Retos de plataformas como CyberDefenders y LetsDefend, resueltos y
-        documentados de principio a fin: metodología, evidencia, IOCs y línea de
-        tiempo. Incluyo también qué me costó y qué haría distinto, porque de eso
-        se aprende más que del resultado.
+        Retos de plataformas como CyberDefenders y LetsDefend, resueltos y documentados de principio
+        a fin: metodología, evidencia, IOCs y línea de tiempo. Incluyo también qué me costó y qué
+        haría distinto, porque de eso se aprende más que del resultado.
       </p>
     </header>
 
-    <!-- TODA la lista dentro de UNA ventana -->
-    <Window title="write-ups/" icon="folder">
-      <!-- Mini-toolbar tipo Finder con la cuenta de items -->
-      <div class="toolbar">
-        <span class="toolbar-info">
-          {sortedPosts.length} {sortedPosts.length === 1 ? 'write-up' : 'write-ups'}
-        </span>
+    {sortedPosts.length === 0 ? (
+      <div class="empty">
+        <span class="empty-prompt">C:\WRITEUPS&gt; dir<span class="cursor" aria-hidden="true"></span></span>
+        <p>Aún no hay write-ups publicados.</p>
       </div>
-
-      {sortedPosts.length === 0 ? (
-        <p class="muted">Aún no hay write-ups publicados.</p>
-      ) : (
-        <div class="file-list">
-          {sortedPosts.map((post) => <PostCard post={post} />)}
-        </div>
-      )}
-    </Window>
+    ) : (
+      <div class="card post-list">
+        {sortedPosts.map((post) => <PostCard post={post} />)}
+      </div>
+    )}
   </div>
 </BaseLayout>
 
 <style>
-  .page-header {
-    margin-bottom: 2rem;
-  }
-
-  .page-header h1 {
-    margin-bottom: 0.7rem;
-  }
-
-  .page-intro {
-    color: var(--fg-muted);
-    font-size: 1rem;
-    max-width: 55ch;
-  }
-
-  /* Toolbar dentro de la ventana — recuerda al "view options" del Finder */
-  .toolbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.4rem 0.8rem;
-    margin: -1rem -1.2rem 0.5rem -1.2rem;     /* sangría hasta los bordes de la ventana */
-    background: var(--window-chrome);
-    border-bottom: 1px solid var(--border);
-    box-shadow: inset 1px 1px 0 var(--bevel-light), inset -1px -1px 0 var(--bevel-dark);
-  }
-
-  .toolbar-info {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    color: var(--fg-muted);
-  }
-
-  .file-list {
-    margin: 0 -0.4rem;
+  .post-list {
+    overflow: hidden;
   }
 </style>

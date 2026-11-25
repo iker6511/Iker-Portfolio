@@ -2,624 +2,693 @@
 // ============================================================================
 // index.astro — PÁGINA PRINCIPAL
 // ============================================================================
-// La home presenta cada sección como una "ventana" del OS:
-//   1. Ventana "about-me.txt"     → presentación (hero + bio)
-//   2. Ventana "intereses.txt"    → cosas que me gustan
-//   3. Ventana "blog/"            → últimos posts (icono de carpeta)
-//   4. Ventana "proyectos/"       → proyectos destacados
-//
-// Cada ventana entra con animación de apertura en cascada (window-open).
-// Los textos son DUMMY DATA — cámbialos cuando quieras.
+// Secciones (cada una marcada con una tecla de función, como la fila F1–F12
+// del Model M):
+//   Hero         → presentación, foto en un monitor de la época, habilidades
+//   F1 Sobre mí
+//   F2 Experiencia
+//   F3 Proyectos (destacados)
+//   F4 Write-ups (últimos)
+//   F5 Certificaciones   → edita el array `certificaciones`
+//   Contacto     → botón con forma de tecla Intro
 // ============================================================================
 
-import BaseLayout from "../layouts/BaseLayout.astro";
-import Window from "../components/Window.astro";
-import Icon from "../components/Icon.astro";
-import PostCard from "../components/PostCard.astro";
-import ProjectCard from "../components/ProjectCard.astro";
-import { getCollection } from "astro:content";
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import PostCard from '../components/PostCard.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { getCollection } from 'astro:content';
 
 const base = import.meta.env.BASE_URL;
 
-// Últimos 3 posts publicados
-const allPosts = await getCollection("posts", ({ data }) => !data.draft);
+// Últimos 3 write-ups publicados
+const allPosts = await getCollection('posts', ({ data }) => !data.draft);
 const recentPosts = allPosts
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
   .slice(0, 3);
 
 // Proyectos destacados
-const allProjects = await getCollection("proyectos");
+const allProjects = await getCollection('proyectos');
 const featuredProjects = allProjects
   .filter((p) => p.data.featured)
   .sort((a, b) => b.data.order - a.data.order);
+
+// 👇 HABILIDADES (aparecen como teclas en la presentación) 👇
+const skills = ['PHP', 'Linux', 'WordPress', 'Dolibarr', 'Bash', 'Volatility3', 'Autopsy', 'FTK Imager'];
+
+// 👇 CERTIFICACIONES: añade aquí las tuyas 👇
+//   { title: 'Nombre', issuer: 'Entidad', year: 2026, url: 'https://...' (opcional) }
+const certificaciones: { title: string; issuer: string; year: number; url?: string }[] = [];
 ---
 
 <BaseLayout
   title="Iker Reyes — Proyectos de sistemas y DFIR"
   description="Proyectos de desarrollo, administración de sistemas y análisis forense digital, junto con write-ups y respuesta a incidentes."
 >
-  <div class="container">
-    {
-      /* =============================================================
-         1. VENTANA: ~/about-me.txt
-         ============================================================= */
-    }
-    <Window title="~/about-me.txt" icon="document">
-      <div class="hero">
-        <!-- Avatar como mini-ventana con la foto -->
-        <div class="avatar-frame" aria-hidden="true">
-          <div class="avatar-titlebar">
-            <span class="avatar-controls">
-              <span></span><span></span><span></span>
-            </span>
-          </div>
-          <div class="avatar-body">
-            <span class="avatar-letter">
-              <img
-                class="profile-picture profile-picture--day"
-                src="images/iker-retro-day.png"
-                alt="foto de perfil día"
-              />
-              <img
-                class="profile-picture profile-picture--night"
-                src="images/iker-retro-night.png"
-                alt="foto de perfil noche"
-              />
-            </span>
-          </div>
-        </div>
+  <!-- =============================================================
+       HERO
+       ============================================================= -->
+  <section class="hero container">
+    <div class="hero-text rise">
+      <span class="eyebrow">Hola, soy Iker<span class="cursor" aria-hidden="true"></span></span>
+      <h1>
+        Desarrollo, administro y <span class="hero-accent">analizo</span> sistemas.
+      </h1>
+      <p class="hero-tagline">
+        Desarrollador PHP y Sysadmin con 3 años de experiencia, orientando el perfil hacia
+        análisis forense digital y respuesta a incidentes.
+      </p>
 
-        <div class="hero-text">
-          <span class="kicker">Hola, soy Iker</span>
-          <h1>
-            Desarrollo, administro y <span class="hero-accent">analizo</span> sistemas.
-          </h1>
-          <p class="hero-tagline">
-            Desarrollador PHP y Sysadmin con 3 años de experiencia, orientando el
-            perfil hacia análisis forense digital y respuesta a incidentes.
-          </p>
-        </div>
+      <div class="hero-actions">
+        <a href={`${base}proyectos/`} class="btn btn-primary">
+          Ver proyectos <Icon name="arrow-right" size={16} />
+        </a>
+        <a href={`${base}posts/`} class="btn">Leer write-ups</a>
       </div>
 
-      <hr class="ventana-divider" />
+      <ul class="chips hero-skills" aria-label="Herramientas y tecnologías">
+        {skills.map((s) => <li class="key">{s}</li>)}
+      </ul>
+    </div>
 
-      <h2>Sobre mí</h2>
+    <!-- Foto dentro de un monitor beige de los 80 -->
+    <figure class="monitor rise" aria-hidden="true">
+      <div class="monitor-bezel">
+        <div class="monitor-screen">
+          <img class="pic-day" src={`${base}images/iker-retro-day.png`} alt="" width="320" height="320" />
+          <img class="pic-night" src={`${base}images/iker-retro-night.png`} alt="" width="320" height="320" />
+        </div>
+        <div class="monitor-chin">
+          <span class="monitor-label mono">IKER · 5151</span>
+          <span class="monitor-power"></span>
+        </div>
+      </div>
+      <div class="monitor-stand"></div>
+    </figure>
+  </section>
+
+  <!-- =============================================================
+       F1 — SOBRE MÍ
+       ============================================================= -->
+  <section id="sobre-mi" class="section container">
+    <div class="section-head">
+      <h2 class="section-title"><span class="key key-mod">F1</span> Sobre mí</h2>
+    </div>
+
+    <div class="about">
       <div class="prose">
         <p>
-          Trabajo como desarrollador PHP, principalmente con WordPress y
-          Dolibarr, donde principalmente realizo adaptaciones sobre sistemas
-          existentes, resolución de incidencias, análisis de problemas y
-          mantenimiento de aplicaciones en producción.
+          Trabajo como desarrollador PHP, principalmente con WordPress y Dolibarr, donde
+          principalmente realizo adaptaciones sobre sistemas existentes, resolución de
+          incidencias, análisis de problemas y mantenimiento de aplicaciones en producción.
         </p>
         <p>
-          Esa parte de sistemas es la que me llevó al análisis forense. Cuando
-          administras una máquina acabas queriendo saber exactamente qué le ha
-          pasado, en qué orden y con qué rastro. Ahí es donde estoy poniendo el
-          foco: análisis de memoria, forense de disco, análisis de tráfico y
-          respuesta a incidentes.
+          Esa parte de sistemas es la que me llevó al análisis forense. Cuando administras una
+          máquina acabas queriendo saber exactamente qué le ha pasado, en qué orden y con qué
+          rastro. Ahí es donde estoy poniendo el foco: análisis de memoria, forense de disco,
+          análisis de tráfico y respuesta a incidentes.
         </p>
         <p>
-          Formado en informática forense y elaboración de informes periciales.
-          Publico write-ups de los retos que resuelvo porque documentar es la
-          única forma de aprender de verdad, y porque un informe bien escrito es
-          la mitad del trabajo.
-        </p>
-        <p>
-          Si te interesa contactar conmigo,
-          <a href="mailto:iker.reyesn8@gmail.com">escríbeme</a>.
+          Formado en informática forense y elaboración de informes periciales. Publico write-ups
+          de los retos que resuelvo porque documentar es la única forma de aprender de verdad, y
+          porque un informe bien escrito es la mitad del trabajo.
         </p>
       </div>
-    </Window>
 
-    {
-      /* =============================================================
-         2. VENTANA: ~/Evolución profesional.txt   (experiencia laboral y estudios)
-         ============================================================= */
-    }
-    <Window title="~/Evolución profesional.txt" icon="folder">
-      <div class="timeline">
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-content">
-            <span class="timeline-date">Presente (en paralelo)</span>
-            <h3>Formación autodidacta en DFIR y blue team</h3>
-            <p>
-              Proyectos de análisis forense: memoria con Volatility3, análisis
-              de disco con Autopsy y Timeline Explorer, tráfico de red y reglas
-              de detección Sigma. Documento los hallazgos y aprendizajes de cada
-              proyecto y reto.
-            </p>
-          </div>
-        </div>
+      <aside class="card facts">
+        <span class="eyebrow">En corto</span>
+        <dl>
+          <div><dt>Rol</dt><dd>Desarrollador PHP / Sysadmin</dd></div>
+          <div><dt>Experiencia</dt><dd>3 años</dd></div>
+          <div><dt>Enfoque</dt><dd>DFIR y blue team</dd></div>
+          <div><dt>Formación</dt><dd>Perito informático forense, DAW, ASIR</dd></div>
+        </dl>
+      </aside>
+    </div>
+  </section>
 
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-content">
-            <span class="timeline-date">2024 — Presente</span>
-            <h3>Desarrollador web / Sysadmin</h3>
-            <p>
-              Desarrollo y mantenimiento de ERP/CRM (Dolibarr) y WordPress,
-              administración de servidores, automatización mediante scripting,
-              gestión de backups y soporte técnico a clientes.
-            </p>
-          </div>
-        </div>
+  <!-- =============================================================
+       F2 — EXPERIENCIA
+       ============================================================= -->
+  <section id="experiencia" class="section container">
+    <div class="section-head">
+      <h2 class="section-title"><span class="key key-mod">F2</span> Experiencia y formación</h2>
+    </div>
 
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-content">
-            <span class="timeline-date">Educación</span>
-            <h3>Estudios técnicos</h3>
-            <ul>
-              <li>
-                Perito Judicial en Informática y Electrónica Forense +
-                Elaboración de Informes Periciales.
-              </li>
-              <li>Desarrollo de Aplicaciones Web (DAW).</li>
-              <li>Administración de Sistemas Informáticos en Red (ASIR).</li>
-            </ul>
-          </div>
+    <ol class="timeline">
+      <li class="tl-item">
+        <span class="tl-date mono"><span class="tl-led tl-led-on" aria-hidden="true"></span>Presente</span>
+        <div class="tl-body">
+          <h3>Formación autodidacta en DFIR y blue team</h3>
+          <span class="tl-sub">En paralelo al trabajo</span>
+          <p>
+            Proyectos de análisis forense: memoria con Volatility3, análisis de disco con Autopsy
+            y Timeline Explorer, tráfico de red y reglas de detección Sigma. Documento los
+            hallazgos y aprendizajes de cada proyecto y reto.
+          </p>
         </div>
+      </li>
+
+      <li class="tl-item">
+        <span class="tl-date mono"><span class="tl-led tl-led-on" aria-hidden="true"></span>2024 — hoy</span>
+        <div class="tl-body">
+          <h3>Desarrollador web / Sysadmin</h3>
+          <p>
+            Desarrollo y mantenimiento de ERP/CRM (Dolibarr) y WordPress, administración de
+            servidores, automatización mediante scripting, gestión de backups y soporte técnico a
+            clientes.
+          </p>
+        </div>
+      </li>
+
+      <li class="tl-item">
+        <span class="tl-date mono"><span class="tl-led" aria-hidden="true"></span>Formación</span>
+        <div class="tl-body">
+          <h3>Estudios técnicos</h3>
+          <ul>
+            <li>Perito Judicial en Informática y Electrónica Forense + Elaboración de Informes Periciales.</li>
+            <li>Desarrollo de Aplicaciones Web (DAW).</li>
+            <li>Administración de Sistemas Informáticos en Red (ASIR).</li>
+          </ul>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- =============================================================
+       F3 — PROYECTOS
+       ============================================================= -->
+  <section id="proyectos" class="section container">
+    <div class="section-head">
+      <div>
+        <h2 class="section-title"><span class="key key-mod">F3</span> Proyectos destacados</h2>
       </div>
-    </Window>
+      <a href={`${base}proyectos/`} class="see-all">Ver todos <Icon name="arrow-right" size={15} /></a>
+    </div>
 
-    {
-      /* =============================================================
-         3. VENTANA: ~/certificaciones.txt
-         ============================================================= */
-    }
-    <Window title="~/certificaciones.txt" icon="document">
-      <h2 class="window-h2">Certificaciones</h2>
-      <p class="prose">
-        Acreditaciones en seguridad y análisis forense, y formación técnica de
-        base en desarrollo e infraestructura.
-      </p>
-      <div class="file-list">
-        <!-- <div class="file-row">
-          <span class="file-icon" aria-hidden="true">
-            <Icon name="document" size={16} />
-          </span>
-          <div class="file-info">
-            <h3 class="file-name">Titulo</h3>
-            <p class="file-desc">Descripción</p>
-          </div>
-          <div class="file-meta">
-            <span>2026</span>
-          </div>
-        </div> -->
+    {featuredProjects.length === 0 ? (
+      <div class="empty">
+        <span class="empty-prompt">C:\PROYECTOS&gt; dir<span class="cursor" aria-hidden="true"></span></span>
+        <p>Próximamente: los primeros proyectos documentados.</p>
       </div>
-    </Window>
+    ) : (
+      <div class="project-grid">
+        {featuredProjects.map((proyecto) => <ProjectCard proyecto={proyecto} />)}
+      </div>
+    )}
+  </section>
 
-    {
-      /* =============================================================
-         4. VENTANA: Write-ups/   (últimos posts)
-         ============================================================= */
-    }
-    <Window title="write-ups/" icon="folder">
-      <header class="section-header">
-        <h2 class="window-h2">Últimos write-ups</h2>
-        <a href={`${base}posts/`} class="btn">Ver todos los write-ups→</a>
-      </header>
+  <!-- =============================================================
+       F4 — WRITE-UPS
+       ============================================================= -->
+  <section id="writeups" class="section container">
+    <div class="section-head">
+      <h2 class="section-title"><span class="key key-mod">F4</span> Últimos write-ups</h2>
+      <a href={`${base}posts/`} class="see-all">Ver todos <Icon name="arrow-right" size={15} /></a>
+    </div>
 
-      {
-        recentPosts.length === 0 ? (
-          <p class="muted">Aún no hay posts publicados.</p>
-        ) : (
-          <div class="file-list">
-            {recentPosts.map((post) => (
-              <PostCard post={post} />
-            ))}
-          </div>
-        )
-      }
-    </Window>
+    {recentPosts.length === 0 ? (
+      <div class="empty">
+        <span class="empty-prompt">C:\WRITEUPS&gt; dir<span class="cursor" aria-hidden="true"></span></span>
+        <p>Aún no hay write-ups publicados.</p>
+      </div>
+    ) : (
+      <div class="card post-list">
+        {recentPosts.map((post) => <PostCard post={post} />)}
+      </div>
+    )}
+  </section>
 
-    {
-      /* =============================================================
-         5. VENTANA: proyectos/   (destacados)
-         ============================================================= */
-    }
-    <Window title="proyectos/" icon="folder">
-      <header class="section-header">
-        <h2 class="window-h2">Proyectos destacados</h2>
-        <a href={`${base}proyectos/`} class="btn">Ver todos →</a>
-      </header>
+  <!-- =============================================================
+       F5 — CERTIFICACIONES
+       ============================================================= -->
+  <section id="certificaciones" class="section container">
+    <div class="section-head">
+      <div>
+        <h2 class="section-title"><span class="key key-mod">F5</span> Certificaciones</h2>
+        <p class="section-intro">
+          Acreditaciones en seguridad y análisis forense, y formación técnica de base en desarrollo
+          e infraestructura.
+        </p>
+      </div>
+    </div>
 
-      {
-        featuredProjects.length === 0 ? (
-          <p class="muted">Próximamente: los primeros proyectos documentados.</p>
-        ) : (
-          <div class="project-grid">
-            {featuredProjects.map((proyecto) => (
-              <ProjectCard proyecto={proyecto} />
-            ))}
-          </div>
-        )
-      }
-    </Window>
-  </div>
+    {certificaciones.length === 0 ? (
+      <div class="empty">
+        <span class="empty-prompt">C:\CERTS&gt; dir<span class="cursor" aria-hidden="true"></span></span>
+        <p>Las certificaciones aparecerán aquí en cuanto las obtenga.</p>
+      </div>
+    ) : (
+      <ul class="cert-grid">
+        {certificaciones.map((c) => (
+          <li class="card cert">
+            <span class="mono cert-year">{c.year}</span>
+            <strong class="cert-title">
+              {c.url ? <a href={c.url} target="_blank" rel="noopener noreferrer">{c.title}</a> : c.title}
+            </strong>
+            <span class="muted">{c.issuer}</span>
+          </li>
+        ))}
+      </ul>
+    )}
+  </section>
+
+  <!-- =============================================================
+       CONTACTO
+       ============================================================= -->
+  <section id="contacto" class="section container">
+    <div class="card contact">
+      <div>
+        <h2>¿Hablamos?</h2>
+        <p class="muted">
+          Si te interesa contactar conmigo por trabajo, un proyecto o un reto que quieras comentar,
+          escríbeme y te respondo lo antes posible.
+        </p>
+      </div>
+      <a href="mailto:iker.reyesn8@gmail.com" class="enter-key" aria-label="Escríbeme por correo">
+        <span class="enter-legend">Intro</span>
+        <span class="enter-text">Escríbeme <span aria-hidden="true">↵</span></span>
+      </a>
+    </div>
+  </section>
 </BaseLayout>
 
 <style>
   /* ----------------------------------------------------------------
-     HERO (dentro de la ventana about-me.txt)
+     HERO
      ---------------------------------------------------------------- */
-
-  .timeline {
-    position: relative;
-    margin-left: 0;
-    padding-left: 32px;
-    margin-bottom: 28px;
-  }
-
-  .timeline::before {
-    content: "";
-    position: absolute;
-    left: 18px;
-    top: 0;
-    width: 2px;
-    height: 100%;
-    background: linear-gradient(
-      to bottom,
-      var(--accent-light),
-      var(--accent-deep)
-    );
-    box-shadow: 0 0 10px rgba(56, 67, 102, 0.12);
-    border-radius: 999px;
-  }
-
-  .timeline-item {
-    position: relative;
-    margin-bottom: 30px;
-  }
-
-  .timeline-dot {
-    position: absolute;
-    left: -18px;
-    top: 1rem;
-    width: 10px;
-    height: 10px;
-    /* border-radius: 50%; */
-    border: 1px solid rgba(26, 26, 26, 0.4);
-    background: var(--accent);
-    box-shadow:
-      0 1px 0 rgba(255, 255, 255, 0.18),
-      0 1px 4px rgba(0, 0, 0, 0.08);
-    transition:
-      transform 0.2s ease,
-      box-shadow 0.2s ease;
-  }
-
-  .timeline-content {
-    position: relative;
-    margin-left: 44px;
-    padding: 1rem;
-    min-height: 5rem;
-    background: var(--window-bg);
-    border: 1px solid var(--bevel-edge);
-    box-shadow:
-      inset 1px 1px 0 var(--bevel-light),
-      inset -1px -1px 0 var(--bevel-dark),
-      2px 2px 0 rgba(0, 0, 0, 0.08);
-    transition:
-      transform 0.2s ease,
-      background 0.2s ease,
-      box-shadow 0.2s ease;
-  }
-
-  .timeline-item:hover .timeline-content {
-    transform: translateX(4px);
-    background: var(--window-bg);
-    box-shadow:
-      inset 1px 1px 0 var(--bevel-light),
-      inset -1px -1px 0 var(--bevel-dark),
-      3px 3px 0 rgba(0, 0, 0, 0.12);
-  }
-
-  .timeline-item:hover .timeline-dot {
-    transform: scale(1.15);
-    box-shadow:
-      0 1px 0 rgba(255, 255, 255, 0.18),
-      0 0 0 3px rgba(56, 67, 102, 0.08);
-  }
-
-  .timeline-date {
-    font-size: 0.85rem;
-    opacity: 0.75;
-    display: block;
-    margin-bottom: 0.5rem;
-    letter-spacing: 0.04em;
-    color: var(--accent-deep);
-  }
-
-  .timeline-content h3 {
-    margin: 0;
-    font-size: 1rem;
-  }
-
-  .timeline-content p,
-  .timeline-content ul {
-    margin: 0.35rem 0 0 0;
-    line-height: 1.7;
-    opacity: 0.88;
-  }
-
-  .timeline-content ul {
-    padding-left: 1rem;
-    list-style-type: disc;
-  }
-
-  .timeline-content li {
-    margin-bottom: 0.4rem;
-  }
-
-  @keyframes pulse {
-    0%,
-    100% {
-      transform: scale(1);
-      box-shadow: 0 0 0 1px rgba(56, 67, 102, 0.12);
-    }
-    50% {
-      transform: scale(1.15);
-      box-shadow: 0 0 0 6px rgba(56, 67, 102, 0.12);
-    }
-  }
-
-  .timeline-item:first-child .timeline-dot {
-    animation: pulse 1.8s infinite ease-in-out;
-  }
-
   .hero {
-    display: flex;
-    align-items: flex-start;
-    gap: 2.5rem; /* era 1.8rem */
-    margin-bottom: 1.8rem;
-  }
-
-  /* Avatar como MINI-VENTANA con su propia barra y biselado */
-  .avatar-frame {
-    flex-shrink: 0;
-    width: 230px; /* era 110px */
-    background: var(--window-bg);
-    box-shadow:
-      inset 1px 1px 0 var(--bevel-light),
-      inset -2px -2px 0 var(--bevel-dark),
-      0 0 0 1px var(--bevel-edge),
-      2px 2px 0 0 rgba(0, 0, 0, 0.25);
-  }
-
-  .avatar-titlebar {
-    background: var(--titlebar-bg);
-    padding: 5px 7px; /* era 4px 6px */
-    display: flex;
-    justify-content: flex-end;
-    border-bottom: 1px solid var(--bevel-edge);
-  }
-
-  .avatar-controls {
-    display: inline-flex;
-    gap: 3px;
-  }
-
-  .avatar-controls > span {
-    width: 10px; /* era 8px */
-    height: 10px;
-    background: var(--window-chrome);
-    box-shadow:
-      inset 1px 1px 0 var(--bevel-light),
-      inset -1px -1px 0 var(--bevel-dark),
-      0 0 0 1px var(--bevel-edge);
-    display: inline-block;
-  }
-
-  .avatar-body {
-    height: 230px; /* era 90px */
-    display: flex;
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.85fr);
     align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    background: var(--window-bg);
+    gap: 3rem;
+    padding-top: 4rem;
+    padding-bottom: 3.5rem;
   }
 
-  .avatar-letter {
-    display: block;
-    width: 100%;
-    height: 100%;
+  .hero h1 {
+    margin-bottom: 1.1rem;
   }
 
-  :global([data-theme="dark"]) .avatar-letter {
-    color: var(--accent);
-  }
-
-  .hero-text h1 {
-    margin-bottom: 0.7rem;
-    font-size: 2rem;
-    max-width: 50ch;
-  }
-
-  /* Palabra resaltada en el h1 — fondo verde sólido tipo highlight */
+  /* "analizo" subrayado con rotulador */
   .hero-accent {
-    background: var(--accent);
-    color: var(--titlebar-fg);
-    padding: 0 0.15em;
+    color: var(--accent);
+    background: linear-gradient(transparent 68%, var(--accent-soft) 68%);
+    padding: 0 0.05em;
   }
 
   .hero-tagline {
-    font-size: 1.1rem; /* era 1rem */
+    font-size: 1.15rem;
     color: var(--fg-muted);
     max-width: 50ch;
-    margin: 0;
+    margin-bottom: 1.6rem;
   }
 
-  .profile-picture {
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-bottom: 1.8rem;
+  }
+
+  .hero-skills .key {
+    font-size: 0.78rem;
+  }
+
+  /* MONITOR beige con la foto */
+  .monitor {
+    justify-self: center;
+    width: min(100%, 360px);
+    animation-delay: 0.1s;
+  }
+
+  .monitor-bezel {
+    padding: 18px 18px 10px;
+    background: linear-gradient(180deg, #ebe6d8 0%, #d6d0bf 100%);
+    border: 1px solid #a8a08a;
+    border-radius: 14px 14px 10px 10px;
+    box-shadow:
+      inset 0 2px 0 rgba(255, 255, 255, 0.7),
+      inset 0 -3px 0 rgba(0, 0, 0, 0.08),
+      0 18px 40px rgba(40, 30, 10, 0.25);
+  }
+
+  :global([data-theme='dark']) .monitor-bezel {
+    background: linear-gradient(180deg, #4a4943 0%, #35342f 100%);
+    border-color: #1d1c19;
+    box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.1), 0 18px 40px rgba(0, 0, 0, 0.5);
+  }
+
+  .monitor-screen {
+    position: relative;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: 18px / 14px;
+    border: 6px solid #2a2a27;
+    background: #111;
+    box-shadow: inset 0 0 0 1px #000;
+  }
+
+  .monitor-screen img {
     width: 100%;
     height: 100%;
-    display: block;
-    transition: ease 0.5s;
+    object-fit: cover;
   }
 
-  .profile-picture--night {
+  /* Scanlines + reflejo del cristal */
+  .monitor-screen::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.14), transparent 55%),
+      repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.16) 0 1px, transparent 1px 3px);
+    box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.55);
+  }
+
+  .pic-night {
     display: none;
   }
 
-  :global([data-theme="dark"]) .profile-picture--day {
-    display: none;
-  }
-
-  :global([data-theme="dark"]) .profile-picture--night {
+  :global([data-theme='dark']) .pic-night {
     display: block;
   }
 
-  .profile-picture:hover {
-    filter: grayscale(0%);
-    transform: scale(1.08);
+  :global([data-theme='dark']) .pic-day {
+    display: none;
   }
 
-  /* En móvil hero apilado */
-  @media (max-width: 730px) {
-    .hero {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 1.2rem;
-    }
-    .avatar-frame {
-      width: 110px; /* era 80px — un pelín más generoso en móvil */
-    }
-    .avatar-body {
-      height: 90px;
-    }
-    .avatar-letter {
-      /* font-size removed for image */
-    }
-  }
-
-  /* ----------------------------------------------------------------
-     Resto de elementos dentro de las ventanas
-     ---------------------------------------------------------------- */
-
-  /* Divisor dentro de una ventana — más sobrio que el global */
-  .ventana-divider {
-    border: none;
-    border-top: 1px dashed var(--border);
-    margin: 1.5rem 0;
-  }
-
-  /* Encabezado de sección dentro de ventana (h2 + botón a la derecha) */
-  .window-h2 {
-    margin: 0;
-  }
-
-  .section-header {
+  .monitor-chin {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 1rem;
-    gap: 1rem;
-    flex-wrap: wrap;
+    padding: 10px 4px 2px;
   }
 
-  /* Lista de intereses */
-  .interests {
-    list-style: none;
+  .monitor-label {
+    font-size: 0.66rem;
+    letter-spacing: 0.15em;
+    color: #6b6553;
+  }
+
+  :global([data-theme='dark']) .monitor-label {
+    color: #9a9484;
+  }
+
+  .monitor-power {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--led-on);
+    box-shadow: 0 0 6px var(--led-on);
+  }
+
+  .monitor-stand {
+    width: 46%;
+    height: 16px;
+    margin: 0 auto;
+    background: linear-gradient(180deg, #c9c2ae, #b5ad97);
+    border-radius: 0 0 8px 8px;
+    border: 1px solid #a8a08a;
+    border-top: none;
+  }
+
+  :global([data-theme='dark']) .monitor-stand {
+    background: linear-gradient(180deg, #2f2e29, #24231f);
+    border-color: #1d1c19;
+  }
+
+  /* ----------------------------------------------------------------
+     SOBRE MÍ
+     ---------------------------------------------------------------- */
+  .about {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 0.5rem 1.5rem;
-    padding: 0;
-    margin: 0.5rem 0 0 0;
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    gap: 2.5rem;
+    align-items: start;
   }
 
-  .interests li {
-    font-size: 0.95rem;
-    padding: 0.3rem 0;
+  .facts {
+    padding: 1.3rem 1.4rem;
   }
 
-  .interest-mark {
-    color: var(--accent-deep);
-    margin-right: 0.5rem;
-    font-size: 0.8rem;
+  .facts dl {
+    display: flex;
+    flex-direction: column;
   }
 
-  :global([data-theme="dark"]) .interest-mark {
-    color: var(--accent);
-  }
-
-  /* Lista de archivos (posts) — sin border-bottom en el último */
-  .file-list {
-    margin: 0 -0.5rem; /* compensa el padding de cada fila */
-  }
-
-  /* Cada fila de archivo/certificación */
-  .file-row {
+  .facts dl > div {
     display: grid;
-    grid-template-columns: 24px 1fr auto;
-    gap: 0.9rem;
-    align-items: center;
-    padding: 0.7rem 0.8rem;
-    color: var(--fg);
-    border-bottom: 1px dashed var(--border);
-    transition: background 0.12s ease;
+    grid-template-columns: 6.5rem 1fr;
+    gap: 0.8rem;
+    padding: 0.55rem 0;
+    border-bottom: 1px dashed var(--line);
+    font-size: 0.93rem;
   }
 
-  .file-row:last-child {
+  .facts dl > div:last-child {
     border-bottom: none;
   }
 
-  .file-row:hover {
-    background: var(--accent);
-    color: var(--titlebar-fg);
+  .facts dt {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--fg-muted);
+    padding-top: 0.12rem;
   }
 
-  .file-row:hover .file-desc,
-  .file-row:hover .file-meta {
-    color: var(--titlebar-fg);
-  }
-
-  .file-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    color: var(--icon);
-  }
-
-  .file-row:hover .file-icon {
-    color: white;
-  }
-
-  .file-info {
-    min-width: 0;
-    flex: 1;
-  }
-
-  .file-name {
+  /* ----------------------------------------------------------------
+     TIMELINE
+     ---------------------------------------------------------------- */
+  .timeline {
+    list-style: none;
     margin: 0;
-    font-size: 0.95rem;
-    font-weight: 500;
-    color: inherit;
-    word-break: break-word;
+    padding: 0;
   }
 
-  .file-desc {
-    margin: 0.15rem 0 0 0;
+  .tl-item {
+    display: grid;
+    grid-template-columns: 9.5rem minmax(0, 1fr);
+    gap: 1.8rem;
+    padding: 1.4rem 0;
+    border-bottom: 1px dashed var(--line);
+  }
+
+  .tl-item:first-child {
+    padding-top: 0;
+  }
+
+  .tl-item:last-child {
+    border-bottom: none;
+  }
+
+  .tl-date {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    align-self: start;
+    padding-top: 0.15rem;
     font-size: 0.85rem;
-    opacity: 0.7;
     color: var(--fg-muted);
   }
 
-  .file-meta {
-    text-align: right;
-    white-space: nowrap;
+  .tl-led {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--led-off);
     flex-shrink: 0;
+  }
+
+  .tl-led-on {
+    background: var(--led-on);
+    box-shadow: 0 0 6px var(--led-on);
+  }
+
+  .tl-body h3 {
+    margin-bottom: 0.2rem;
+  }
+
+  .tl-sub {
+    display: block;
     font-size: 0.85rem;
-    opacity: 0.7;
+    color: var(--fg-muted);
+    margin-bottom: 0.4rem;
+  }
+
+  .tl-body p,
+  .tl-body ul {
+    margin: 0.4rem 0 0;
     color: var(--fg-muted);
   }
 
-  /* Grid de proyectos */
+  .tl-body ul {
+    padding-left: 1.2rem;
+  }
+
+  .tl-body li + li {
+    margin-top: 0.25rem;
+  }
+
+  /* ----------------------------------------------------------------
+     LISTADOS
+     ---------------------------------------------------------------- */
+  .see-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  .see-all:hover {
+    text-decoration: underline;
+  }
+
   .project-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.2rem;
-    margin-top: 0.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.4rem;
+  }
+
+  .post-list {
+    overflow: hidden;
+  }
+
+  .cert-grid {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  .cert {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 1.1rem 1.2rem;
+  }
+
+  .cert-year {
+    font-size: 0.78rem;
+    color: var(--fg-muted);
+  }
+
+  .cert-title a {
+    color: var(--fg);
+  }
+
+  .cert-title a:hover {
+    color: var(--accent);
+  }
+
+  /* ----------------------------------------------------------------
+     CONTACTO + tecla Intro
+     ---------------------------------------------------------------- */
+  #contacto {
+    border-top: none;
+    padding-top: 1rem;
+  }
+
+  .contact {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 2rem 2.2rem;
+  }
+
+  .contact h2 {
+    margin-bottom: 0.4rem;
+  }
+
+  .contact p {
+    margin: 0;
+    max-width: 52ch;
+  }
+
+  /* Tecla Intro grande (gris de modificador, legenda arriba a la izquierda) */
+  .enter-key {
+    --depth: 6px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 11rem;
+    height: 5.2rem;
+    padding: 0.55rem 0.8rem 0.6rem;
+    color: var(--key-mod-fg);
+    background: linear-gradient(180deg, var(--key-mod-top), var(--key-mod-bottom));
+    border: 1px solid var(--key-edge);
+    border-radius: 7px;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.35),
+      inset 0 -3px 0 rgba(0, 0, 0, 0.08),
+      0 var(--depth) 0 var(--key-mod-side),
+      0 calc(var(--depth) + 1px) 0 var(--key-edge),
+      0 calc(var(--depth) + 5px) 10px rgba(0, 0, 0, 0.22);
+    margin-bottom: calc(var(--depth) + 1px);
+    transition: transform 0.06s ease, box-shadow 0.06s ease;
+  }
+
+  .enter-key:hover {
+    filter: brightness(1.05);
+  }
+
+  .enter-key:active {
+    transform: translateY(5px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 1px 0 var(--key-mod-side), 0 2px 0 var(--key-edge);
+  }
+
+  .enter-legend {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    opacity: 0.8;
+  }
+
+  .enter-text {
+    align-self: flex-end;
+    font-weight: 700;
+    font-size: 1.05rem;
+  }
+
+  /* ----------------------------------------------------------------
+     RESPONSIVE
+     ---------------------------------------------------------------- */
+  @media (max-width: 880px) {
+    .hero {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+      padding-top: 2.5rem;
+    }
+    .monitor {
+      order: -1;
+      width: min(70%, 280px);
+    }
+    .about {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .tl-item {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+    .contact {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 1.5rem;
+    }
+    .enter-key {
+      width: 100%;
+    }
   }
 </style>

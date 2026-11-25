@@ -1,0 +1,331 @@
+---
+// ============================================================================
+// Header.astro — cabecera fija con navegación en forma de TECLAS
+// ============================================================================
+//   [I] Iker Reyes      [Inicio] [Proyectos] [Write-ups]     ● ● ●  [☀]
+//
+// Guiños al IBM Model M:
+//   - Cada enlace es una tecla que se hunde al pulsarla.
+//   - Atajos de teclado reales: I (inicio), P (proyectos), W (write-ups),
+//     T (cambiar tema). La letra del atajo va subrayada, como en los menús
+//     de los programas de los 80.
+//   - Los tres pilotos LED del teclado (Bloq Num, Bloq Mayús, Bloq Despl):
+//       Num   → siempre encendido (el teclado está "conectado")
+//       Mayús → refleja el Bloq Mayús real de tu teclado
+//       Despl → se enciende mientras haces scroll
+// ============================================================================
+
+import Icon from './Icon.astro';
+
+const base = import.meta.env.BASE_URL;
+const path = Astro.url.pathname;
+
+// 👇 Enlaces de navegación. `key` es el atajo de teclado (una letra del label).
+const links = [
+  { label: 'Inicio', href: base, key: 'i' },
+  { label: 'Proyectos', href: `${base}proyectos/`, key: 'p' },
+  { label: 'Write-ups', href: `${base}posts/`, key: 'w' },
+];
+
+const isActive = (href: string) => {
+  const p = path.replace(/\/$/, '') || '/';
+  const h = href.replace(/\/$/, '') || '/';
+  if (h === base.replace(/\/$/, '')) return p === h;
+  return p.startsWith(h);
+};
+
+// Subraya la letra del atajo dentro del label
+const splitLabel = (label: string, key: string) => {
+  const i = label.toLowerCase().indexOf(key);
+  return { before: label.slice(0, i), letter: label.slice(i, i + 1), after: label.slice(i + 1) };
+};
+---
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href={base} class="brand" aria-label="Iker Reyes — inicio">
+      <span class="key key-mod brand-key" aria-hidden="true">I</span>
+      <span class="brand-text">
+        <strong>Iker Reyes</strong>
+        <span>Sysadmin · DFIR</span>
+      </span>
+    </a>
+
+    <nav class="nav" aria-label="Navegación principal">
+      {links.map((l) => {
+        const s = splitLabel(l.label, l.key);
+        const active = isActive(l.href);
+        return (
+          <a
+            href={l.href}
+            class:list={['key', 'nav-key', { 'nav-key-active': active }]}
+            aria-current={active ? 'page' : undefined}
+            aria-keyshortcuts={l.key.toUpperCase()}
+            data-shortcut={l.key}
+          >
+            <span>{s.before}<u>{s.letter}</u>{s.after}</span>
+          </a>
+        );
+      })}
+    </nav>
+
+    <div class="header-right">
+      <div class="leds" aria-hidden="true" title="Pilotos del teclado">
+        <span class="led led-on" data-led="num"><i></i>Num</span>
+        <span class="led" data-led="caps"><i></i>Mayús</span>
+        <span class="led" data-led="scroll"><i></i>Despl</span>
+      </div>
+
+      <button
+        type="button"
+        class="key key-mod theme-key"
+        data-theme-toggle
+        data-shortcut="t"
+        aria-keyshortcuts="T"
+        aria-label="Cambiar tema claro/oscuro (atajo: T)"
+        title="Cambiar tema (T)"
+      >
+        <span class="theme-ico-sun"><Icon name="sun" size={16} /></span>
+        <span class="theme-ico-moon"><Icon name="moon" size={16} /></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 68px;
+  }
+
+  /* MARCA */
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    color: var(--fg);
+  }
+
+  .brand-key {
+    font-size: 1rem;
+    font-weight: 600;
+    width: 2.2rem;
+    height: 2.2rem;
+    padding: 0;
+  }
+
+  .brand:hover .brand-key {
+    filter: brightness(1.06);
+  }
+
+  .brand-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+  }
+
+  .brand-text strong {
+    font-size: 1.02rem;
+    letter-spacing: -0.01em;
+  }
+
+  .brand-text span {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--fg-muted);
+  }
+
+  /* NAVEGACIÓN = teclas */
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding-top: 4px; /* compensa la "profundidad" de la tecla */
+  }
+
+  .nav-key {
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    padding: 0.35em 0.85em;
+  }
+
+  .nav-key u {
+    text-decoration-thickness: 2px;
+    text-underline-offset: 2px;
+  }
+
+  /* Página actual: tecla "bloqueada" (hundida) con el color de acento */
+  .nav-key-active {
+    color: var(--accent-fg);
+    background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 85%, white), var(--accent));
+    border-color: var(--accent-strong);
+    transform: translateY(2px);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.3),
+      0 2px 0 var(--accent-strong),
+      0 3px 0 var(--key-edge);
+  }
+
+  /* DERECHA: LEDs + tema */
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .leds {
+    display: flex;
+    gap: 0.7rem;
+    padding: 0.35rem 0.6rem;
+    border-radius: 4px;
+    background: var(--bg-alt);
+    border: 1px solid var(--line);
+  }
+
+  .led {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    font-family: var(--font-mono);
+    font-size: 0.56rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+  }
+
+  .led i {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--led-off);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.4);
+    transition: background 0.12s ease, box-shadow 0.12s ease;
+  }
+
+  .led-on i {
+    background: var(--led-on);
+    box-shadow: 0 0 6px var(--led-on), inset 0 -1px 1px rgba(0, 0, 0, 0.2);
+  }
+
+  .theme-key {
+    width: 2.4rem;
+    height: 2.2rem;
+    padding: 0;
+  }
+
+  .theme-ico-moon {
+    display: inline-flex;
+  }
+
+  .theme-ico-sun {
+    display: none;
+  }
+
+  :global([data-theme='dark']) .theme-ico-sun {
+    display: inline-flex;
+  }
+
+  :global([data-theme='dark']) .theme-ico-moon {
+    display: none;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 820px) {
+    .leds {
+      display: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .header-inner {
+      flex-wrap: wrap;
+      gap: 0.6rem 0.8rem;
+      padding-top: 0.6rem;
+      padding-bottom: 0.5rem;
+    }
+    .nav {
+      order: 3;
+      width: 100%;
+      justify-content: space-between;
+    }
+    .nav-key {
+      flex: 1;
+      font-size: 0.85rem;
+      padding: 0.35em 0.4em;
+    }
+  }
+</style>
+
+<script>
+  // --------------------------------------------------------------------------
+  // Cambio de tema (botón y atajo T)
+  // --------------------------------------------------------------------------
+  function toggleTheme() {
+    const html = document.documentElement;
+    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    try {
+      localStorage.setItem('theme', next);
+    } catch {}
+  }
+
+  document.querySelectorAll('[data-theme-toggle]').forEach((b) => b.addEventListener('click', toggleTheme));
+
+  // --------------------------------------------------------------------------
+  // Atajos de teclado: I, P, W, T (sin modificadores y fuera de campos de texto)
+  // La tecla en pantalla se "hunde" un instante antes de actuar.
+  // --------------------------------------------------------------------------
+  const capsLed = document.querySelector('[data-led="caps"]');
+
+  document.addEventListener('keydown', (e) => {
+    // Piloto Bloq Mayús: refleja el estado real
+    if (capsLed && typeof e.getModifierState === 'function') {
+      capsLed.classList.toggle('led-on', e.getModifierState('CapsLock'));
+    }
+
+    if (e.ctrlKey || e.metaKey || e.altKey || e.repeat) return;
+    if (document.querySelector('dialog[open]')) return; // no actuar con el visor de imágenes abierto
+    const t = e.target as HTMLElement | null;
+    if (t && (t.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(t.tagName))) return;
+
+    const k = e.key.toLowerCase();
+    const el = document.querySelector<HTMLElement>(`.site-header [data-shortcut="${k}"]`);
+    if (!el) return;
+
+    e.preventDefault();
+    el.classList.add('is-pressed');
+    setTimeout(() => {
+      el.classList.remove('is-pressed');
+      el.click();
+    }, 110);
+  });
+
+  // --------------------------------------------------------------------------
+  // Piloto Bloq Despl: encendido mientras hay scroll
+  // --------------------------------------------------------------------------
+  const scrollLed = document.querySelector('[data-led="scroll"]');
+  let scrollTimer: ReturnType<typeof setTimeout> | undefined;
+  window.addEventListener(
+    'scroll',
+    () => {
+      scrollLed?.classList.add('led-on');
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(() => scrollLed?.classList.remove('led-on'), 250);
+    },
+    { passive: true }
+  );
+</script>

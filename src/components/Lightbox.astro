@@ -1,0 +1,113 @@
+---
+// ============================================================================
+// Lightbox.astro — ver las capturas en grande
+// ============================================================================
+// Al pulsar cualquier imagen dentro de `.prose` (contenido de proyectos y
+// write-ups), se abre a pantalla completa. Se cierra con Esc, con la X o
+// pulsando fuera.
+//
+// USO: añade <Lightbox /> en la página (ya está en las fichas de proyecto
+// y de write-up).
+// ============================================================================
+---
+
+<dialog class="lightbox" id="lightbox" aria-label="Imagen ampliada">
+  <button type="button" class="key key-mod lightbox-close" aria-label="Cerrar (Esc)">Esc</button>
+  <figure>
+    <img id="lightbox-img" alt="" />
+    <figcaption id="lightbox-caption"></figcaption>
+  </figure>
+</dialog>
+
+<style>
+  /* Las imágenes del contenido indican que se pueden ampliar */
+  :global(.prose img) {
+    cursor: zoom-in;
+    transition: box-shadow 0.15s ease;
+  }
+
+  :global(.prose img:hover) {
+    box-shadow: 0 0 0 3px var(--accent);
+  }
+
+  .lightbox {
+    max-width: none;
+    max-height: none;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 2.5rem 1.5rem 1.5rem;
+    border: none;
+    background: transparent;
+    overflow: hidden;
+  }
+
+  .lightbox::backdrop {
+    background: rgba(10, 10, 8, 0.88);
+    backdrop-filter: blur(3px);
+  }
+
+  .lightbox[open] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lightbox figure {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  .lightbox img {
+    max-width: min(1600px, 100%);
+    max-height: calc(100vh - 7rem);
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 6px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+    cursor: zoom-out;
+  }
+
+  .lightbox figcaption {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: #e9e5da;
+    text-align: center;
+  }
+
+  .lightbox-close {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+  }
+</style>
+
+<script>
+  const dialog = document.getElementById('lightbox') as HTMLDialogElement | null;
+  const big = document.getElementById('lightbox-img') as HTMLImageElement | null;
+  const caption = document.getElementById('lightbox-caption');
+
+  if (dialog && big) {
+    document.querySelectorAll<HTMLImageElement>('.prose img').forEach((img) => {
+      img.tabIndex = 0; // accesible con teclado (Intro para abrir)
+      const open = () => {
+        big.src = img.currentSrc || img.src;
+        big.alt = img.alt;
+        if (caption) caption.textContent = img.alt;
+        dialog.showModal();
+      };
+      img.addEventListener('click', open);
+      img.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') open();
+      });
+    });
+
+    // Cerrar con la X, pulsando la imagen o pulsando fuera (Esc lo hace el navegador)
+    dialog.addEventListener('click', () => dialog.close());
+  }
+</script>

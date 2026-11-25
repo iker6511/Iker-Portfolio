@@ -2,12 +2,8 @@
 // ============================================================================
 // proyectos/index.astro — LISTADO DE PROYECTOS
 // ============================================================================
-// Todos los proyectos en una sola ventana titulada "proyectos/", con cada
-// proyecto como una mini-ventana (ProjectCard) en un grid.
-// ============================================================================
 
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Window from '../../components/Window.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
 import { getCollection } from 'astro:content';
 
@@ -16,6 +12,8 @@ const sortedProjects = allProjects.sort((a, b) => {
   if (a.data.order !== b.data.order) return b.data.order - a.data.order;
   return b.data.year - a.data.year;
 });
+
+const count = `${sortedProjects.length} ${sortedProjects.length === 1 ? 'proyecto' : 'proyectos'}`;
 ---
 
 <BaseLayout
@@ -23,69 +21,32 @@ const sortedProjects = allProjects.sort((a, b) => {
   description="Proyectos personales de análisis forense, desarrollo y administración de sistemas, documentados con sus objetivos, herramientas y resultados."
 >
   <div class="container">
-    <header class="page-header">
-      <span class="kicker">Proyectos personales</span>
+    <header class="page-head">
+      <span class="eyebrow">Proyectos personales · {count}</span>
       <h1>Proyectos</h1>
       <p class="page-intro">
-        Aquí encontrarás proyectos de análisis forense y tecnología en los que
-        trabajo. Cada ficha resume su objetivo, el proceso y los resultados,
-        junto con las herramientas utilizadas.
+        Aquí encontrarás proyectos de análisis forense y tecnología en los que trabajo. Cada ficha
+        resume su objetivo, el proceso y los resultados, junto con las herramientas utilizadas.
       </p>
     </header>
 
-    <Window title="proyectos/" icon="folder">
-      <div class="toolbar">
-        <span class="toolbar-info">
-          {sortedProjects.length} {sortedProjects.length === 1 ? 'proyecto' : 'proyectos'}
-        </span>
+    {sortedProjects.length === 0 ? (
+      <div class="empty">
+        <span class="empty-prompt">C:\PROYECTOS&gt; dir<span class="cursor" aria-hidden="true"></span></span>
+        <p>Todavía no hay proyectos publicados.</p>
       </div>
-
-      {sortedProjects.length === 0 ? (
-        <p class="muted">Todavía no hay proyectos publicados.</p>
-      ) : (
-        <div class="project-grid">
-          {sortedProjects.map((proyecto) => <ProjectCard proyecto={proyecto} />)}
-        </div>
-      )}
-    </Window>
+    ) : (
+      <div class="project-grid">
+        {sortedProjects.map((proyecto) => <ProjectCard proyecto={proyecto} />)}
+      </div>
+    )}
   </div>
 </BaseLayout>
 
 <style>
-  .page-header {
-    margin-bottom: 2rem;
-  }
-
-  .page-header h1 {
-    margin-bottom: 0.7rem;
-  }
-
-  .page-intro {
-    color: var(--fg-muted);
-    font-size: 1rem;
-    max-width: 60ch;
-  }
-
-  .toolbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.4rem 0.8rem;
-    margin: -1rem -1.2rem 1rem -1.2rem;
-    background: var(--window-chrome);
-    border-bottom: 1px solid var(--border);
-    box-shadow: inset 1px 1px 0 var(--bevel-light), inset -1px -1px 0 var(--bevel-dark);
-  }
-
-  .toolbar-info {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    color: var(--fg-muted);
-  }
-
   .project-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.2rem;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.4rem;
   }
 </style>
