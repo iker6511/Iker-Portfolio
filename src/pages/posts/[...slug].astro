@@ -1,6 +1,6 @@
 ---
 // ============================================================================
-// posts/[...slug].astro — WRITE-UP INDIVIDUAL
+// posts/[...slug].astro — NOTA INDIVIDUAL
 // ============================================================================
 // Columna de lectura cómoda (~72 caracteres) con fecha, título, resumen y
 // etiquetas, y el contenido del Markdown.
@@ -37,7 +37,7 @@ const formattedUpdated = post.data.updatedDate ? fmt(post.data.updatedDate) : un
 <BaseLayout title={`${post.data.title} — Iker`} description={post.data.description}>
   <div class="container container-narrow">
     <header class="page-head post-head">
-      <a href={`${base}posts/`} class="key back-link"><Icon name="arrow-left" size={14} /> Write-ups</a>
+      <a href={`${base}posts/`} class="key back-link"><Icon name="arrow-left" size={14} /> Notas</a>
 
       <span class="eyebrow">
         <time datetime={post.data.pubDate.toISOString()}>{formattedDate}</time>
@@ -59,7 +59,7 @@ const formattedUpdated = post.data.updatedDate ? fmt(post.data.updatedDate) : un
     </article>
 
     <nav class="post-end">
-      <a href={`${base}posts/`} class="btn"><Icon name="arrow-left" size={16} /> Todos los write-ups</a>
+      <a href={`${base}posts/`} class="btn"><Icon name="arrow-left" size={16} /> Todas las notas</a>
       <a href="mailto:iker.reyesn8@gmail.com" class="btn btn-primary">Comentarlo conmigo <Icon name="mail" size={16} /></a>
     </nav>
   </div>

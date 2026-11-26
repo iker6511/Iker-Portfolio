@@ -2,11 +2,11 @@
 // ============================================================================
 // Header.astro — cabecera fija con navegación en forma de TECLAS
 // ============================================================================
-//   [I] Iker Reyes      [Inicio] [Proyectos] [Write-ups]     ● ● ●  [☀]
+//   [I] Iker Reyes      [Inicio] [Proyectos] [Notas]         ● ● ●  [☀]
 //
 // Guiños al IBM Model M:
 //   - Cada enlace es una tecla que se hunde al pulsarla.
-//   - Atajos de teclado reales: I (inicio), P (proyectos), W (write-ups),
+//   - Atajos de teclado reales: I (inicio), P (proyectos), N (notas),
 //     T (cambiar tema). La letra del atajo va subrayada, como en los menús
 //     de los programas de los 80.
 //   - Los tres pilotos LED del teclado (Bloq Num, Bloq Mayús, Bloq Despl):
@@ -24,7 +24,7 @@ const path = Astro.url.pathname;
 const links = [
   { label: 'Inicio', href: base, key: 'i' },
   { label: 'Proyectos', href: `${base}proyectos/`, key: 'p' },
-  { label: 'Write-ups', href: `${base}posts/`, key: 'w' },
+  { label: 'Notas', href: `${base}posts/`, key: 'n' },
 ];
 
 const isActive = (href: string) => {
@@ -286,7 +286,7 @@ const splitLabel = (label: string, key: string) => {
   document.querySelectorAll('[data-theme-toggle]').forEach((b) => b.addEventListener('click', toggleTheme));
 
   // --------------------------------------------------------------------------
-  // Atajos de teclado: I, P, W, T (sin modificadores y fuera de campos de texto)
+  // Atajos de teclado: I, P, N, T (sin modificadores y fuera de campos de texto)
   // La tecla en pantalla se "hunde" un instante antes de actuar.
   // --------------------------------------------------------------------------
   const capsLed = document.querySelector('[data-led="caps"]');

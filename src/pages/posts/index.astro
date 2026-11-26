@@ -1,6 +1,6 @@
 ---
 // ============================================================================
-// posts/index.astro — LISTADO DE WRITE-UPS
+// posts/index.astro — LISTADO DE NOTAS
 // ============================================================================
 
 import BaseLayout from '../../layouts/BaseLayout.astro';
@@ -10,17 +10,17 @@ import { getCollection } from 'astro:content';
 const allPosts = await getCollection('posts', ({ data }) => !data.draft);
 const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 
-const count = `${sortedPosts.length} ${sortedPosts.length === 1 ? 'write-up' : 'write-ups'}`;
+const count = `${sortedPosts.length} ${sortedPosts.length === 1 ? 'nota' : 'notas'}`;
 ---
 
 <BaseLayout
-  title="Write-ups — Iker"
+  title="Notas — Iker"
   description="Laboratorios, despliegues y retos de sistemas y DevOps documentados paso a paso: qué monté, cómo y qué aprendí."
 >
   <div class="container">
     <header class="page-head">
       <span class="eyebrow">Sistemas y DevOps · {count}</span>
-      <h1>Write-ups</h1>
+      <h1>Notas</h1>
       <p class="page-intro">
         Laboratorios, despliegues y problemas de sistemas resueltos y documentados paso a paso:
         qué quería conseguir, cómo lo monté, qué falló por el camino y qué haría distinto la
@@ -30,8 +30,8 @@ const count = `${sortedPosts.length} ${sortedPosts.length === 1 ? 'write-up' : '
 
     {sortedPosts.length === 0 ? (
       <div class="empty">
-        <span class="empty-prompt">C:\WRITEUPS&gt; dir<span class="cursor" aria-hidden="true"></span></span>
-        <p>Aún no hay write-ups publicados.</p>
+        <span class="empty-prompt">C:\NOTAS&gt; dir<span class="cursor" aria-hidden="true"></span></span>
+        <p>Aún no hay notas publicadas.</p>
       </div>
     ) : (
       <div class="card post-list">

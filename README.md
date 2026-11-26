@@ -1,6 +1,6 @@
 ## ✏️ Cómo añadir contenido
 
-### Un nuevo post del blog
+### Una nueva nota
 
 Crea un archivo Markdown en `src/content/posts/`:
 
@@ -15,7 +15,7 @@ tags: ["devops", "docker"]
 draft: false                     # true = no se publica
 ---
 
-Contenido del blog
+Contenido de la nota
 ```
 
 ### Un nuevo proyecto

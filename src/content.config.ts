@@ -5,13 +5,13 @@
 //
 // Una Content Collection es un grupo de archivos Markdown (o JSON, etc.) que
 // comparten estructura. Aquí definimos DOS:
-//   - posts:     entradas del blog (src/content/posts/*.md)
+//   - posts:     notas (src/content/posts/*.md)
 //   - proyectos: fichas de proyectos (src/content/proyectos/*.md)
 //
 // Cada colección tiene un SCHEMA con Zod que valida el frontmatter de los .md.
 // Si añades un campo nuevo a un post, primero declaralo aquí.
 //
-// Para crear un POST nuevo:    crea src/content/posts/mi-post.md
+// Para crear una NOTA nueva:   crea src/content/posts/mi-nota.md
 // Para crear un PROYECTO nuevo: crea src/content/proyectos/mi-proyecto.md
 // ============================================================================
 
@@ -19,7 +19,7 @@ import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
 // ----------------------------------------------------------------------------
-// Colección: POSTS (blog)
+// Colección: POSTS (notas)
 // ----------------------------------------------------------------------------
 const posts = defineCollection({
   // glob() lee todos los .md de la carpeta indicada

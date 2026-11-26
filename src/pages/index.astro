@@ -8,7 +8,7 @@
 //   F1 Sobre mí
 //   F2 Experiencia
 //   F3 Proyectos (destacados)
-//   F4 Write-ups (últimos)
+//   F4 Notas (últimas)
 //   F5 Certificaciones   → edita el array `certificaciones`
 //   Contacto     → botón con forma de tecla Intro
 // ============================================================================
@@ -21,7 +21,7 @@ import { getCollection } from 'astro:content';
 
 const base = import.meta.env.BASE_URL;
 
-// Últimos 3 write-ups publicados
+// Últimas 3 notas publicadas
 const allPosts = await getCollection('posts', ({ data }) => !data.draft);
 const recentPosts = allPosts
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
@@ -43,7 +43,7 @@ const certificaciones: { title: string; issuer: string; year: number; url?: stri
 
 <BaseLayout
   title="Iker Reyes — Sysadmin y DevOps"
-  description="Desarrollador PHP y Sysadmin orientado a DevOps: proyectos y write-ups de automatización, contenedores, CI/CD e infraestructura."
+  description="Desarrollador PHP y Sysadmin orientado a DevOps: proyectos y notas sobre automatización, contenedores, CI/CD e infraestructura."
 >
   <!-- =============================================================
        HERO
@@ -63,7 +63,7 @@ const certificaciones: { title: string; issuer: string; year: number; url?: stri
         <a href={`${base}proyectos/`} class="btn btn-primary">
           Ver proyectos <Icon name="arrow-right" size={16} />
         </a>
-        <a href={`${base}posts/`} class="btn">Leer write-ups</a>
+        <a href={`${base}posts/`} class="btn">Leer notas</a>
       </div>
 
       <ul class="chips hero-skills" aria-label="Herramientas y tecnologías">
@@ -110,7 +110,7 @@ const certificaciones: { title: string; issuer: string; year: number; url?: stri
           infraestructura como código y observabilidad.
         </p>
         <p>
-          Publico write-ups de lo que monto y aprendo, porque documentar es la mejor forma de
+          Publico notas sobre lo que monto y aprendo, porque documentar es la mejor forma de
           asentar lo aprendido, y porque un buen runbook es la mitad del trabajo.
         </p>
       </div>
@@ -199,18 +199,18 @@ const certificaciones: { title: string; issuer: string; year: number; url?: stri
   </section>
 
   <!-- =============================================================
-       F4 — WRITE-UPS
+       F4 — NOTAS
        ============================================================= -->
-  <section id="writeups" class="section container">
+  <section id="notas" class="section container">
     <div class="section-head">
-      <h2 class="section-title"><span class="key key-mod">F4</span> Últimos write-ups</h2>
+      <h2 class="section-title"><span class="key key-mod">F4</span> Últimas notas</h2>
       <a href={`${base}posts/`} class="see-all">Ver todos <Icon name="arrow-right" size={15} /></a>
     </div>
 
     {recentPosts.length === 0 ? (
       <div class="empty">
-        <span class="empty-prompt">C:\WRITEUPS&gt; dir<span class="cursor" aria-hidden="true"></span></span>
-        <p>Aún no hay write-ups publicados.</p>
+        <span class="empty-prompt">C:\NOTAS&gt; dir<span class="cursor" aria-hidden="true"></span></span>
+        <p>Aún no hay notas publicadas.</p>
       </div>
     ) : (
       <div class="card post-list">

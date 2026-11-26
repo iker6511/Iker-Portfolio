@@ -254,7 +254,7 @@ li > a:hover {
   font-family: var(--font-mono);
 }
 
-/* ---- Contenido Markdown (write-ups y proyectos) ---- */
+/* ---- Contenido Markdown (notas y proyectos) ---- */
 .prose {
   font-size: 1.02rem;
 }
