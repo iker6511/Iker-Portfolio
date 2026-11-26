@@ -34,7 +34,7 @@ const featuredProjects = allProjects
   .sort((a, b) => b.data.order - a.data.order);
 
 // 👇 HABILIDADES (aparecen como teclas en la presentación) 👇
-const skills = ['PHP', 'Linux', 'WordPress', 'Dolibarr', 'Bash', 'Volatility3', 'Autopsy', 'FTK Imager'];
+const skills = ['Linux', 'Bash', 'Git', 'GitHub Actions', 'Docker', 'Nginx', 'MySQL', 'PHP'];
 
 // 👇 CERTIFICACIONES: añade aquí las tuyas 👇
 //   { title: 'Nombre', issuer: 'Entidad', year: 2026, url: 'https://...' (opcional) }
@@ -42,8 +42,8 @@ const certificaciones: { title: string; issuer: string; year: number; url?: stri
 ---
 
 <BaseLayout
-  title="Iker Reyes — Proyectos de sistemas y DFIR"
-  description="Proyectos de desarrollo, administración de sistemas y análisis forense digital, junto con write-ups y respuesta a incidentes."
+  title="Iker Reyes — Sysadmin y DevOps"
+  description="Desarrollador PHP y Sysadmin orientado a DevOps: proyectos y write-ups de automatización, contenedores, CI/CD e infraestructura."
 >
   <!-- =============================================================
        HERO
@@ -52,11 +52,11 @@ const certificaciones: { title: string; issuer: string; year: number; url?: stri
     <div class="hero-text rise">
       <span class="eyebrow">Hola, soy Iker<span class="cursor" aria-hidden="true"></span></span>
       <h1>
-        Desarrollo, administro y <span class="hero-accent">analizo</span> sistemas.
+        Desarrollo, administro y <span class="hero-accent">automatizo</span> sistemas.
       </h1>
       <p class="hero-tagline">
-        Desarrollador PHP y Sysadmin con 3 años de experiencia, orientando el perfil hacia
-        análisis forense digital y respuesta a incidentes.
+        Desarrollador PHP y Sysadmin con 3 años de experiencia, orientando el perfil hacia DevOps:
+        automatización, contenedores, CI/CD e infraestructura.
       </p>
 
       <div class="hero-actions">
@@ -103,15 +103,15 @@ const certificaciones: { title: string; issuer: string; year: number; url?: stri
           incidencias, análisis de problemas y mantenimiento de aplicaciones en producción.
         </p>
         <p>
-          Esa parte de sistemas es la que me llevó al análisis forense. Cuando administras una
-          máquina acabas queriendo saber exactamente qué le ha pasado, en qué orden y con qué
-          rastro. Ahí es donde estoy poniendo el foco: análisis de memoria, forense de disco,
-          análisis de tráfico y respuesta a incidentes.
+          Esa parte de sistemas es la que me ha llevado hacia DevOps. Después de desplegar,
+          mantener y apagar fuegos en producción, la conclusión es siempre la misma: lo que se
+          repite se automatiza, lo que se despliega se versiona y lo que corre en producción se
+          monitoriza. Ahí estoy poniendo el foco: contenedores, pipelines de CI/CD,
+          infraestructura como código y observabilidad.
         </p>
         <p>
-          Formado en informática forense y elaboración de informes periciales. Publico write-ups
-          de los retos que resuelvo porque documentar es la única forma de aprender de verdad, y
-          porque un informe bien escrito es la mitad del trabajo.
+          Publico write-ups de lo que monto y aprendo, porque documentar es la mejor forma de
+          asentar lo aprendido, y porque un buen runbook es la mitad del trabajo.
         </p>
       </div>
 
@@ -120,8 +120,8 @@ const certificaciones: { title: string; issuer: string; year: number; url?: stri
         <dl>
           <div><dt>Rol</dt><dd>Desarrollador PHP / Sysadmin</dd></div>
           <div><dt>Experiencia</dt><dd>3 años</dd></div>
-          <div><dt>Enfoque</dt><dd>DFIR y blue team</dd></div>
-          <div><dt>Formación</dt><dd>Perito informático forense, DAW, ASIR</dd></div>
+          <div><dt>Enfoque</dt><dd>DevOps y automatización</dd></div>
+          <div><dt>Formación</dt><dd>ASIR, DAW</dd></div>
         </dl>
       </aside>
     </div>
@@ -139,12 +139,12 @@ const certificaciones: { title: string; issuer: string; year: number; url?: stri
       <li class="tl-item">
         <span class="tl-date mono"><span class="tl-led tl-led-on" aria-hidden="true"></span>Presente</span>
         <div class="tl-body">
-          <h3>Formación autodidacta en DFIR y blue team</h3>
+          <h3>Formación autodidacta en DevOps</h3>
           <span class="tl-sub">En paralelo al trabajo</span>
           <p>
-            Proyectos de análisis forense: memoria con Volatility3, análisis de disco con Autopsy
-            y Timeline Explorer, tráfico de red y reglas de detección Sigma. Documento los
-            hallazgos y aprendizajes de cada proyecto y reto.
+            Laboratorios propios de contenedores con Docker, pipelines de CI/CD con GitHub
+            Actions, automatización con Bash y administración de servidores Linux. Documento cada
+            montaje y lo que aprendo de él.
           </p>
         </div>
       </li>
@@ -166,9 +166,9 @@ const certificaciones: { title: string; issuer: string; year: number; url?: stri
         <div class="tl-body">
           <h3>Estudios técnicos</h3>
           <ul>
-            <li>Perito Judicial en Informática y Electrónica Forense + Elaboración de Informes Periciales.</li>
-            <li>Desarrollo de Aplicaciones Web (DAW).</li>
             <li>Administración de Sistemas Informáticos en Red (ASIR).</li>
+            <li>Desarrollo de Aplicaciones Web (DAW).</li>
+            <li>Perito Judicial en Informática y Electrónica Forense + Elaboración de Informes Periciales.</li>
           </ul>
         </div>
       </li>
@@ -227,8 +227,8 @@ const certificaciones: { title: string; issuer: string; year: number; url?: stri
       <div>
         <h2 class="section-title"><span class="key key-mod">F5</span> Certificaciones</h2>
         <p class="section-intro">
-          Acreditaciones en seguridad y análisis forense, y formación técnica de base en desarrollo
-          e infraestructura.
+          Acreditaciones en sistemas, cloud y DevOps, y formación técnica de base en desarrollo e
+          infraestructura.
         </p>
       </div>
     </div>
@@ -290,7 +290,7 @@ const certificaciones: { title: string; issuer: string; year: number; url?: stri
     margin-bottom: 1.1rem;
   }
 
-  /* "analizo" subrayado con rotulador */
+  /* "automatizo" subrayado con rotulador */
   .hero-accent {
     color: var(--accent);
     background: linear-gradient(transparent 68%, var(--accent-soft) 68%);
